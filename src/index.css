@@ -1,0 +1,119 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Chicago';
+  src: local('Chicago'), local('ChicagoFLF');
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: 'Chicago', 'Geneva', 'Monaco', monospace;
+  font-size: 12px;
+  -webkit-font-smoothing: none;
+  image-rendering: pixelated;
+}
+
+/* Mac OS 7 window styles */
+.mac-window {
+  border: 2px solid #000;
+  box-shadow: 2px 2px 0 #000;
+  background: #fff;
+}
+
+.mac-title-bar {
+  background: repeating-linear-gradient(
+    to bottom,
+    #fff 0px,
+    #fff 1px,
+    #888 1px,
+    #888 2px
+  );
+  border-bottom: 2px solid #000;
+  display: flex;
+  align-items: center;
+  padding: 2px 4px;
+  height: 20px;
+  cursor: move;
+  user-select: none;
+}
+
+.mac-title-bar-inactive {
+  background: #fff;
+  border-bottom: 2px solid #000;
+}
+
+.mac-close-btn {
+  width: 12px;
+  height: 12px;
+  border: 2px solid #000;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: default;
+}
+
+.mac-close-btn:hover {
+  background: #000;
+}
+
+.mac-title-text {
+  flex: 1;
+  text-align: center;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0.02em;
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+.mac-menubar {
+  background: #fff;
+  border-bottom: 1px solid #000;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  gap: 16px;
+}
+
+.mac-icon-label {
+  color: #fff;
+  text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+  font-size: 11px;
+  text-align: center;
+  margin-top: 4px;
+  word-break: break-word;
+  max-width: 64px;
+}
+
+.mac-icon-selected .mac-icon-label {
+  background: #000080;
+  color: #fff;
+}
+
+.mac-scrollbar::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+.mac-scrollbar::-webkit-scrollbar-track {
+  background: repeating-conic-gradient(#999 0% 25%, #fff 0% 50%) 0 0 / 4px 4px;
+}
+.mac-scrollbar::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border: 2px solid #000;
+}
