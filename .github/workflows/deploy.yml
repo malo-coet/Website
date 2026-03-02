@@ -3,7 +3,7 @@ name: Deploy Website
 on:
   push:
     branches:
-      - main  # Déclenche le déploiement lors d'un push sur main
+      - main
 
 jobs:
   build-and-deploy:
@@ -24,5 +24,5 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./dist/  # Le dossier généré par Vite
-          server-dir: ./public_html/ # Le dossier de destination sur Hostinger
+          local-dir: ./dist/
+          server-dir: ./public_html/
