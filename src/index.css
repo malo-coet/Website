@@ -1,119 +1,82 @@
-@import "tailwindcss";
-
-@font-face {
-  font-family: 'Chicago';
-  src: local('Chicago'), local('ChicagoFLF');
-}
-
-* {
-  box-sizing: border-box;
-}
-
+/* --- LE BUREAU EN ARRIÈRE-PLAN --- */
 body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  font-family: 'Chicago', 'Geneva', 'Monaco', monospace;
-  font-size: 12px;
-  -webkit-font-smoothing: none;
-  image-rendering: pixelated;
-}
-
-/* Mac OS 7 window styles */
-.mac-window {
-  border: 2px solid #000;
-  box-shadow: 2px 2px 0 #000;
-  background: #fff;
-}
-
-.mac-title-bar {
-  background: repeating-linear-gradient(
-    to bottom,
-    #fff 0px,
-    #fff 1px,
-    #888 1px,
-    #888 2px
-  );
-  border-bottom: 2px solid #000;
+  background-color: #1a1a1a; /* Un fond sombre derrière l'écran */
   display: flex;
-  align-items: center;
-  padding: 2px 4px;
-  height: 20px;
-  cursor: move;
-  user-select: none;
-}
-
-.mac-title-bar-inactive {
-  background: #fff;
-  border-bottom: 2px solid #000;
-}
-
-.mac-close-btn {
-  width: 12px;
-  height: 12px;
-  border: 2px solid #000;
-  background: #fff;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  cursor: default;
-}
-
-.mac-close-btn:hover {
-  background: #000;
-}
-
-.mac-title-text {
-  flex: 1;
-  text-align: center;
-  font-size: 11px;
-  font-weight: bold;
-  letter-spacing: 0.02em;
-  position: absolute;
-  left: 0;
-  right: 0;
-  pointer-events: none;
-}
-
-.mac-menubar {
-  background: #fff;
-  border-bottom: 1px solid #000;
-  height: 20px;
-  display: flex;
   align-items: center;
-  padding: 0 6px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  gap: 16px;
+  height: 100vh;
 }
 
-.mac-icon-label {
-  color: #fff;
-  text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-  font-size: 11px;
-  text-align: center;
-  margin-top: 4px;
-  word-break: break-word;
-  max-width: 64px;
+/* --- LE CADRE DU MONITEUR (Bezel) --- */
+#root {
+  /* On redéfinit la taille de l'écran pour laisser la place au cadre */
+  width: 90vw;
+  height: 90vh;
+  position: relative;
+  overflow: hidden;
+
+  /* La couleur plastique beige du vieux Mac */
+  background-color: #fff;
+  border: 24px solid #d4d4cb;
+  border-bottom-width: 40px; /* Plus épais en bas comme les vieux écrans */
+  border-radius: 20px;
+
+  /* Ombre extérieure (le volume de l'écran) et ombre intérieure (la profondeur de la vitre) */
+  box-shadow:
+          0 20px 50px rgba(0,0,0,0.8),
+          inset 0 0 15px rgba(0,0,0,1);
 }
 
-.mac-icon-selected .mac-icon-label {
-  background: #000080;
-  color: #fff;
+/* --- L'EFFET VITRE ET LUMINESCENCE VERTE (Flare) --- */
+#root::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  /* Un dégradé radial vert au centre qui s'assombrit sur les bords */
+  background: radial-gradient(circle, rgba(100, 255, 100, 0.08) 0%, rgba(0, 15, 0, 0.4) 120%);
+  pointer-events: none; /* Pour pouvoir cliquer à travers l'effet */
+  z-index: 9998;
 }
 
-.mac-scrollbar::-webkit-scrollbar {
-  width: 16px;
-  height: 16px;
+/* --- LES SCANLINES ET LE WOBBLE --- */
+#root::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  /* Lignes horizontales style TV cathodique */
+  background: linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0) 50%,
+          rgba(0, 0, 0, 0.15) 50%,
+          rgba(0, 0, 0, 0.15)
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 9999;
+
+  /* L'animation de scintillement */
+  animation: crt-flicker 0.15s infinite;
 }
-.mac-scrollbar::-webkit-scrollbar-track {
-  background: repeating-conic-gradient(#999 0% 25%, #fff 0% 50%) 0 0 / 4px 4px;
+
+/* --- ANIMATION DU SCINTILLEMENT LÉGER --- */
+@keyframes crt-flicker {
+  0% { opacity: 0.95; }
+  50% { opacity: 0.85; }
+  100% { opacity: 0.95; }
 }
-.mac-scrollbar::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border: 2px solid #000;
+
+/* Optionnel : Un léger wobble sur tout l'écran de temps en temps */
+@keyframes crt-wobble {
+  0%, 100% { transform: translateX(0) scale(1); filter: blur(0px); }
+  10% { transform: translateX(-0.5px) scale(1.001); filter: blur(0.2px); }
+  20% { transform: translateX(0.5px); }
+  30% { transform: translateX(0); }
+}
+
+
+#root > * {
+  animation: crt-wobble 4s infinite;
 }
