@@ -19,11 +19,15 @@ jobs:
         run: npm run build
 
       - name: Sync files to Hostinger
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./dist/
-          server-dir: public_html/
-          dangerous-clean-slate: true
+          uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+          with:
+            server: ${{ secrets.FTP_SERVER }}
+            username: ${{ secrets.FTP_USERNAME }}
+            password: ${{ secrets.FTP_PASSWORD }}
+            local-dir: ./dist/
+            server-dir: public_html/
+            # --- AJOUTEZ CES LIGNES ---
+            protocol: ftp
+            port: 21
+            # Le mode passif est souvent nécessaire pour passer à travers les pare-feu GitHub
+            passive: true
