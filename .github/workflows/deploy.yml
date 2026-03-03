@@ -25,4 +25,12 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
-          server-dir: public_html/
+          # On essaie avec ./ pour être relatif à la racine de ton compte FTP
+          server-dir: ./public_html/
+          # --- OPTIONS ANTI-TIMEOUT ET SÉCURITÉ ---
+          protocol: ftp
+          port: 21
+          # Obligatoire pour passer le pare-feu de GitHub vers Hostinger
+          passive: true
+          # Évite que l'action reste bloquée si le serveur met du temps à répondre
+          timeout: 60000
