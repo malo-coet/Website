@@ -1,0 +1,145 @@
+/* Styles pour centrer le "monitor frame" et définir la zone desktop */
+:root {
+  --bg-1: #071022;
+  --bg-2: #04121a;
+  --frame-bg: rgba(255,255,255,0.02);
+  --glass: rgba(255,255,255,0.04);
+  --radius: 14px;
+  --shadow: 0 20px 50px rgba(2,6,23,0.7);
+
+  /* menu bar variables */
+  --menubar-top: 12px;
+  --menubar-height: 44px;
+}
+
+.desktop-root {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, var(--bg-1), var(--bg-2));
+}
+
+.desktop-frame {
+  width: 100%;
+  max-width: 1200px;
+  height: 82vh;
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,0.04);
+  position: relative;
+  overflow: hidden;
+  padding: 0.5rem;
+}
+
+.desktop-frame-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: calc(var(--radius) - 2px);
+}
+
+/* Desktop area internals */
+.desktop-area { position: relative; width: 100%; height: 100%; }
+
+/* Icons grid - left-aligned boxes with centered icon inside each box */
+.desktop-icons {
+  position: absolute;
+  top: calc(var(--menubar-top) + var(--menubar-height) + 6px);
+  left: 12px; /* align boxes on the left */
+  display: grid;
+  grid-template-columns: 84px; /* single column */
+  grid-auto-rows: auto;
+  gap: 8px; /* tighter gap like Finder */
+  align-content: start;
+  z-index: 5;
+  pointer-events: auto;
+  width: auto; /* let boxes size naturally */
+  padding: 6px 4px;
+  box-sizing: content-box;
+}
+
+.icon-card { width: 84px; height: auto; display:flex; align-items:center; justify-content:center; }
+
+.mac-icon { width: 100%; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding: 4px; box-sizing: border-box; border-radius: 8px; }
+.mac-icon .icon-visual { width: 48px; height: 48px; margin-bottom: 6px; }
+.mac-icon-label { max-width: 84px; text-align:center; font-size: 11px; color: #dfe9f5; }
+
+/* icon hover/focus/selected */
+.mac-icon:hover { background: rgba(255,255,255,0.01); transform: translateY(-2px); }
+.mac-icon:focus { outline: none; box-shadow: 0 6px 18px rgba(2,6,23,0.35); }
+.mac-icon-selected { background: rgba(255,255,255,0.02); box-shadow: inset 0 -2px 0 rgba(255,255,255,0.01); }
+
+/* Make sure keyboard users see a visible focus ring */
+.mac-icon:focus-visible, .menubar-item:focus-visible { outline: 2px solid rgba(200,230,255,0.15); outline-offset: 2px; }
+
+/* Menu bar styling */
+.mac-menubar {
+  position: absolute;
+  top: var(--menubar-top);
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 52px);
+  max-width: 1100px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  height: var(--menubar-height);
+  background: rgba(255,255,255,0.02);
+  border-radius: 10px;
+  z-index: 10;
+  box-shadow: 0 8px 20px rgba(2,6,23,0.25);
+}
+
+/* Menu bar item style (buttons) */
+.menubar-item {
+  background: transparent;
+  border: none;
+  color: #cfe8ff; /* new color for menu text */
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+}
+.menubar-item:hover, .menubar-item:focus { background: rgba(255,255,255,0.02); outline: none; }
+.menubar-item.active, .menubar-time.active { background: rgba(255,255,255,0.03); box-shadow: inset 0 -2px 0 rgba(255,255,255,0.02); }
+
+.menubar-time {
+  background: transparent;
+  border: none;
+  color: #cfe8ff; /* match the menu text color */
+  font-weight: 700;
+  font-size: 12px;
+  padding: 4px 6px;
+  border-radius: 6px;
+}
+
+/* Windows default tweaks */
+.mac-window { overflow: hidden; }
+.mac-scrollbar { background: transparent; color: #e9f2ff; }
+
+/* Responsive tweaks */
+@media (max-width: 1200px) {
+  .desktop-frame { max-width: 1000px; height: 84vh; }
+}
+@media (max-width: 768px) {
+  .desktop-frame { max-width: 820px; height: 88vh; padding: 0.4rem; }
+  .desktop-icons { grid-template-columns: 72px; }
+  .icon-card { width: 72px; }
+  .mac-icon .icon-visual { width: 48px; height: 48px; }
+  .mac-icon-label { max-width: 72px; }
+}
+@media (max-width: 480px) {
+  .desktop-frame { height: 96vh; padding: 0.3rem; }
+  .desktop-icons { grid-template-columns: 64px; }
+  .icon-card { width: 64px; }
+  .mac-icon .icon-visual { width: 44px; height: 44px; }
+  .mac-icon-label { max-width: 64px; }
+  .mac-menubar { top: 8px; width: calc(100% - 32px); }
+}

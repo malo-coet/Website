@@ -1,82 +1,113 @@
-/* --- LE BUREAU EN ARRIÈRE-PLAN --- */
-body {
-  background-color: #1a1a1a; /* Un fond sombre derrière l'écran */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+/* --- STYLES GLOBAUX ET EFFETS CRT ADAPTÉS --- */
+:root {
+  --crt-flare: rgba(100, 255, 100, 0.06);
 }
 
-/* --- LE CADRE DU MONITEUR (Bezel) --- */
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #000; /* fallback */
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Keep the CRT overlay effects but remove the heavy beige bezel from #root
+   The actual "monitor frame" is provided by .desktop-frame in App.css */
 #root {
-  /* On redéfinit la taille de l'écran pour laisser la place au cadre */
-  width: 90vw;
-  height: 90vh;
   position: relative;
   overflow: hidden;
-
-  /* La couleur plastique beige du vieux Mac */
-  background-color: #fff;
-  border: 24px solid #d4d4cb;
-  border-bottom-width: 40px; /* Plus épais en bas comme les vieux écrans */
-  border-radius: 20px;
-
-  /* Ombre extérieure (le volume de l'écran) et ombre intérieure (la profondeur de la vitre) */
-  box-shadow:
-          0 20px 50px rgba(0,0,0,0.8),
-          inset 0 0 15px rgba(0,0,0,1);
+  background: transparent;
 }
 
-/* --- L'EFFET VITRE ET LUMINESCENCE VERTE (Flare) --- */
 #root::before {
   content: " ";
   display: block;
   position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;
-  /* Un dégradé radial vert au centre qui s'assombrit sur les bords */
-  background: radial-gradient(circle, rgba(100, 255, 100, 0.08) 0%, rgba(0, 15, 0, 0.4) 120%);
-  pointer-events: none; /* Pour pouvoir cliquer à travers l'effet */
-  z-index: 9998;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, var(--crt-flare) 0%, rgba(0, 15, 0, 0.45) 120%);
+  pointer-events: none;
+  z-index: 2;
 }
 
-/* --- LES SCANLINES ET LE WOBBLE --- */
 #root::after {
   content: " ";
   display: block;
   position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;
-  /* Lignes horizontales style TV cathodique */
+  inset: 0;
   background: linear-gradient(
           to bottom,
           rgba(255, 255, 255, 0),
           rgba(255, 255, 255, 0) 50%,
-          rgba(0, 0, 0, 0.15) 50%,
-          rgba(0, 0, 0, 0.15)
+          rgba(0, 0, 0, 0.12) 50%,
+          rgba(0, 0, 0, 0.12)
   );
   background-size: 100% 4px;
   pointer-events: none;
-  z-index: 9999;
-
-  /* L'animation de scintillement */
+  z-index: 3;
   animation: crt-flicker 0.15s infinite;
 }
 
-/* --- ANIMATION DU SCINTILLEMENT LÉGER --- */
 @keyframes crt-flicker {
   0% { opacity: 0.95; }
   50% { opacity: 0.85; }
   100% { opacity: 0.95; }
 }
 
-/* Optionnel : Un léger wobble sur tout l'écran de temps en temps */
-@keyframes crt-wobble {
-  0%, 100% { transform: translateX(0) scale(1); filter: blur(0px); }
-  10% { transform: translateX(-0.5px) scale(1.001); filter: blur(0.2px); }
-  20% { transform: translateX(0.5px); }
-  30% { transform: translateX(0); }
+/* Ensure the inner animated wobble is smaller and not shifting the whole viewport */
+#root > div {
+  width: 100%;
+  height: 100%;
+  transform-origin: center;
 }
 
-
-#root > * {
-  animation: crt-wobble 4s infinite;
+/* Basic mac-icon tweaks (used by Icon.tsx) */
+.mac-icon {
+  user-select: none;
 }
+.mac-icon-label {
+  color: #dfe9f5;
+  font-size: 11px;
+  text-align: center;
+  max-width: 88px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Titlebar and window defaults used by Window.tsx */
+.mac-window {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 20px 40px rgba(2,6,23,0.6);
+}
+.mac-title-bar {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.0));
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.mac-close-btn {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ff5f57;
+  border: none;
+}
+
+/* text label styles */
+.text-label { color: #dfe9f5; font-size: 11px; display: inline-block; }
+.text-label-input { font-size: 11px; padding: 4px 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06); background: rgba(0,0,0,0.3); color: #fff; }
+
+/* ensure button reset for mac-icon */
+button.mac-icon { background: transparent; border: none; padding: 0; }
+button.mac-icon:focus { outline: 2px solid rgba(255,255,255,0.08); }
